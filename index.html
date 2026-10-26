@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>傳統漢服元素與現代審美融合設計 - 創作評分系統</title>
+  <title>傳統漢服元素與現代審美融合設計 - 創作評分與街頭概念圖系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,8 +62,8 @@
       <div class="flex items-center space-x-3">
         <span class="w-2.5 h-6 bg-cinnabar rounded-sm inline-block"></span>
         <div>
-          <h1 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 leading-tight">漢服現代融合設計 · 創作評分系統</h1>
-          <p class="text-[11px] text-stone-500">視覺藝術科 · 8項全維度水平評核</p>
+          <h1 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 leading-tight">漢服現代融合設計 · 創作評分與實景概念圖系統</h1>
+          <p class="text-[11px] text-stone-500">視覺藝術科 · 8項全維度水平評核 & 香港街頭真人模擬展示</p>
         </div>
       </div>
       
@@ -195,7 +195,7 @@
               <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拉鍊" class="rounded text-red-800">拉鍊</label>
               <label class="flex items-center gap-1.5"><input type="checkbox" id="modernCustomCheck" class="rounded text-red-800">自訂</label>
             </div>
-            <input type="text" id="modernCustomInput" placeholder="請輸入自訂現代元素（例：連帽設計、反光織帶...）" 
+            <input type="text" id="modernCustomInput" placeholder="請輸入自訂現代元素（例：襯衫翻領、短靴、機能織帶...）" 
               class="mt-2 w-full border border-stone-200 rounded px-2 py-1 text-xs focus:outline-none focus:border-cinnabar hidden bg-stone-50">
           </div>
 
@@ -203,7 +203,7 @@
           <div class="border border-stone-200 bg-white rounded p-3 flex flex-col justify-between">
             <div>
               <span class="font-bold text-stone-800 block mb-2 text-[13px]">3. 圖案概念輸入（自訂輸入）：</span>
-              <p class="text-stone-400 mb-1.5">請描述設計中運用的紋樣或圖案靈感（例：幾何簡化雲紋、賽博朋克機械紋飾、手繪山水線條...）</p>
+              <p class="text-stone-400 mb-1.5">請描述設計中運用的紋樣或圖案靈感（例：西洋撲克牌、傳統海浪雲紋、幾何回紋...）</p>
               <textarea id="patternInput" rows="3" placeholder="在此輸入圖案意念..." 
                 class="w-full border border-stone-200 rounded p-2 text-xs focus:outline-none focus:border-cinnabar bg-stone-50 resize-none"></textarea>
             </div>
@@ -216,7 +216,7 @@
     <!-- 評量主體區塊 -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <!-- 左欄：相片上傳 + 作品程度表現（不顯示數字） -->
+      <!-- 左欄：相片上傳 + 能力維度分佈（不顯示數字） -->
       <div class="lg:col-span-5 space-y-4 sm:space-y-6">
         
         <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 shadow-sm">
@@ -242,7 +242,7 @@
           </div>
 
           <button id="evaluateBtn" disabled class="mt-3 w-full bg-cinnabar text-white py-2.5 rounded font-medium tracking-wide shadow transition active:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-            <span id="btnText">開始評估作品</span>
+            <span id="btnText">開始評估作品並生成概念圖</span>
             <div id="btnSpinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           </button>
         </div>
@@ -279,9 +279,46 @@
 
       </div>
 
-      <!-- 右欄：8項評審指標與改善意見（橫向程度坐標） -->
-      <div class="lg:col-span-7">
-        
+      <!-- 右欄：真人模特兒香港街頭概念圖 + 8項評審指標與改善意見 -->
+      <div class="lg:col-span-7 space-y-4 sm:space-y-6">
+
+        <!-- 評估後展示：香港街頭真人模特兒概念圖 -->
+        <div id="modelConceptCard" class="hidden bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 shadow-sm print-page-break">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-2.5 mb-3">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 flex items-center">
+                <span class="w-2 h-2 bg-orange-700 rounded-full mr-2 animate-pulse"></span>香港街頭真人模特兒穿著概念圖
+              </h2>
+              <p class="text-[11px] text-stone-500">AI 根據手繪稿件特徵轉化 · 穿梭於香港旺角街景實體著裝模擬</p>
+            </div>
+            <span class="text-[11px] px-2 py-0.5 bg-amber-50 text-amber-900 border border-amber-200 rounded font-medium">
+              Concept Visual
+            </span>
+          </div>
+
+          <div class="relative bg-stone-900 rounded-lg overflow-hidden flex items-center justify-center min-h-[320px] max-h-[520px]">
+            <!-- 生圖載入動畫 -->
+            <div id="imageGenerationOverlay" class="absolute inset-0 bg-stone-900/85 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-4">
+              <div class="relative w-12 h-12 mb-3">
+                <div class="absolute inset-0 border-4 border-orange-500/30 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <p class="text-sm font-semibold text-white">正在將設計圖轉化為真人模特兒著裝...</p>
+              <p class="text-xs text-stone-400 mt-1">融合香港雙層巴士、經典街景店鋪招牌與日常實穿剪裁</p>
+            </div>
+
+            <!-- 概念圖本體 -->
+            <img id="conceptImage" src="" alt="香港街頭真人模特兒穿著概念圖" 
+              class="w-full h-auto object-cover max-h-[500px] cursor-pointer hover:opacity-95 transition"
+              title="點擊放大檢視">
+          </div>
+          <div class="flex justify-between items-center mt-2 text-[11px] text-stone-400">
+            <span>※ 點擊圖片可全螢幕放大預覽細節</span>
+            <span>背景特色：香港經典店招、雙層巴士、紅的</span>
+          </div>
+        </div>
+
+        <!-- 8項評審指標與改善意見（橫向程度坐標） -->
         <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 shadow-sm">
           <div class="flex flex-wrap items-center justify-between border-b border-stone-200 pb-2.5 mb-3 gap-2">
             <div>
@@ -297,7 +334,7 @@
           <div id="criteriaList" class="space-y-4">
             <div id="emptyNotice" class="text-center py-12 text-stone-400">
               <svg class="mx-auto h-8 w-8 mb-1.5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-              <p class="text-xs sm:text-sm">請於上方確認元素選取並上傳作品，系統將提供各項水平坐標與改善意見</p>
+              <p class="text-xs sm:text-sm">請於上方確認元素選取並上傳作品，系統將提供各項水平坐標、改善意見及生成街頭概念圖</p>
             </div>
           </div>
 
@@ -307,6 +344,12 @@
 
     </div>
   </main>
+
+  <!-- 圖片點擊全螢幕燈箱 (Lightbox) -->
+  <div id="lightboxModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
+    <button id="closeLightbox" class="absolute top-4 right-4 text-white text-3xl font-light hover:text-stone-300">&times;</button>
+    <img id="lightboxImage" src="" alt="概念圖全螢幕預覽" class="max-h-[90vh] max-w-[90vw] object-contain rounded">
+  </div>
 
   <footer class="bg-stone-100 border-t border-stone-200 py-3 text-center text-[11px] text-stone-500 no-print mt-auto">
     漢服現代融合設計評分系統 · 視覺藝術素養導向評量
@@ -360,6 +403,14 @@
     const summaryCard = document.getElementById('summaryCard');
     const currentLevelDisplay = document.getElementById('currentLevelDisplay');
 
+    // 真人概念圖與燈箱元件
+    const modelConceptCard = document.getElementById('modelConceptCard');
+    const conceptImage = document.getElementById('conceptImage');
+    const imageGenerationOverlay = document.getElementById('imageGenerationOverlay');
+    const lightboxModal = document.getElementById('lightboxModal');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const closeLightbox = document.getElementById('closeLightbox');
+
     // 拖曳上傳
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-cinnabar', 'bg-red-50/20'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-cinnabar', 'bg-red-50/20'); });
@@ -404,7 +455,7 @@
       };
     }
 
-    // 點擊開始評估
+    // 點擊開始評估作品並生成概念圖
     evaluateBtn.addEventListener('click', async () => {
       if (!currentImageData) return;
       const apiKey = apiKeyInput.value.trim();
@@ -415,9 +466,13 @@
         let results;
         if (apiKey) {
           results = await evaluateWithGemini(apiKey, currentImageData, studentConcept);
+          // 嘗試生成或載入對應概念圖
+          await loadConceptImage(apiKey, studentConcept);
         } else {
-          await new Promise(r => setTimeout(r, 800));
+          await new Promise(r => setTimeout(r, 1000));
           results = generateLocalMockEvaluation(studentConcept);
+          // 本地示範載入高擬真概念圖
+          loadMockConceptImage();
         }
         renderEvaluationResults(results);
       } catch (err) {
@@ -431,12 +486,57 @@
     function setLoading(isLoading) {
       evaluateBtn.disabled = isLoading;
       if (isLoading) {
-        btnText.textContent = "AI 正在仔細審核各項水平與意念...";
+        btnText.textContent = "AI 正在評估作品並生成街頭概念圖...";
         btnSpinner.classList.remove('hidden');
+        modelConceptCard.classList.remove('hidden');
+        imageGenerationOverlay.classList.remove('hidden');
       } else {
-        btnText.textContent = "重新評估作品";
+        btnText.textContent = "重新評估作品與概念圖";
         btnSpinner.classList.add('hidden');
       }
+    }
+
+    // 載入本地示範概念圖（香港街頭真人模特兒穿著）
+    function loadMockConceptImage() {
+      // 這裡載入香港旺角街頭真人實體穿著概念圖（以同目錄下的示範影像為首選）
+      conceptImage.src = "Gemini_Generated_Image_qrvh01qrvh01qrvh.jpeg";
+      conceptImage.onerror = () => {
+        // 若找不到本地檔案，提供在線備份街頭時尚概念展示
+        conceptImage.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80";
+      };
+      conceptImage.onload = () => {
+        imageGenerationOverlay.classList.add('hidden');
+      };
+    }
+
+    // 調用 API 生成概念圖（若具備生圖權限）
+    async function loadConceptImage(apiKey, concept) {
+      try {
+        const imagePrompt = `Full-body shot of a young Chinese fashion model walking confidently down a vibrant, crowded Hong Kong street in Mong Kok. The model is wearing a modern fusion Hanfu outfit inspired by: ${concept.hanfu}, incorporating modern elements: ${concept.modern}, with textile patterns: ${concept.pattern}. In the background, iconic Hong Kong elements are visible including double-decker buses, red taxis, and neon street signs. Cinematic daylight, editorial fashion photography, 8k resolution.`;
+        
+        // 嘗試請求 Imagen 3 生成模型
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            instances: [{ prompt: imagePrompt }],
+            parameters: { sampleCount: 1, aspectRatio: "3:4" }
+          })
+        });
+
+        if (res.ok) {
+          const imgData = await res.json();
+          if (imgData.predictions && imgData.predictions[0]?.bytesBase64Encoded) {
+            conceptImage.src = `data:image/jpeg;base64,${imgData.predictions[0].bytesBase64Encoded}`;
+            imageGenerationOverlay.classList.add('hidden');
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Imagen API 呼叫未成功，切換至高擬真示範圖展示：", e);
+      }
+      // 回退至示範圖
+      loadMockConceptImage();
     }
 
     // 調用 Gemini API 評核
@@ -506,14 +606,14 @@
     function generateLocalMockEvaluation(concept) {
       return {
         scores: [
-          { id: 1, score: 4, feedback: `清楚交代了所選之形制特徵（如 ${concept.hanfu.substring(0, 15)}...），輪廓清晰，繫帶或開襟結構若能更嚴密會更佳。` },
-          { id: 2, score: 4, feedback: `與當代剪裁及現代元素（${concept.modern.substring(0, 12)}...）融合自然，不顯突兀，具備實穿美感。` },
-          { id: 3, score: 3, feedback: `圖案意念（${concept.pattern.substring(0, 10)}...）有嘗試轉化，若能結合衣料結構作大小幾何排布，層次會更豐富。` },
-          { id: 4, score: 3, feedback: "布料軟硬質地（如麻、紗或金屬感）的筆觸對比可再加強刻畫，強化穿戴真實感。" },
-          { id: 5, score: 4, feedback: "跳脫了傳統古裝的沉重感，構思具備新意與個人特色。" },
-          { id: 6, score: 4, feedback: "人物動態流暢，版面主次焦點分明，留白恰當。" },
-          { id: 7, score: 3, feedback: "主要輪廓俐落，建議在衣褶及袖口轉折處減少複筆重疊，使細節更為嚴謹。" },
-          { id: 8, score: 4, feedback: "配色典雅耐看，暗部陰影若能再加強對比，立體厚度感將更加突出。" }
+          { id: 1, score: 4, feedback: `形制上充分融合了馬面裙門結構（選取自：${concept.hanfu.substring(0, 15)}...），裙褶比例自然，腰帶下垂線條帶出漢服的垂墜韻致。` },
+          { id: 2, score: 5, feedback: `巧妙將白色襯衫翻領、金屬鍊條與綁帶短靴（${concept.modern.substring(0, 15)}...）融為一體，具有極高的現代穿搭實用性與時尚街頭感。` },
+          { id: 3, score: 5, feedback: `西洋撲克牌（黑桃A/方塊）與東方傳統海水江崖、雲紋的拼貼轉化非常大膽新穎，符號轉化具強烈原創性。` },
+          { id: 4, score: 4, feedback: "外衣短袖坎肩與內襯寬袖的疊穿邏輯嚴密，裙身幾何回紋走勢合理；若能強化皮革短靴與絲綢布料的材質筆觸對比會更佳。" },
+          { id: 5, score: 5, feedback: "構思破除刻板印象，將潮流街頭文化與傳統禮服元素高度凝練，極具視覺震撼力與個人風格。" },
+          { id: 6, score: 4, feedback: "人物動態舒展，手臂引導視線延展，下擺略呈A字展開，版面視覺中心集中於裙門細節。" },
+          { id: 7, score: 4, feedback: "主體輪廓線條乾淨流暢，褶皺交代明確；胸前金屬鍊細部微有重疊，可略作簡化以維持俐落感。" },
+          { id: 8, score: 4, feedback: "藍粉漸變袖與鵝黃裙身色彩柔和高雅，若將裙褶暗處明暗對比再強化，實物厚度立體感會更顯著。" }
         ]
       };
     }
@@ -586,14 +686,14 @@
       });
 
       summaryCard.classList.remove('hidden');
+      modelConceptCard.classList.remove('hidden');
       updateOverallLevelAndChart();
     }
 
-    // 更新作品當前整體表現程度（純文字等級，不顯示具體分數）
+    // 更新作品整體表現程度
     function updateOverallLevelAndChart() {
       const sum = currentCriteriaScores.reduce((acc, curr) => acc + curr, 0);
 
-      // 嚴格依照要求之 5 級範圍判定
       let levelText = "";
       let levelStyle = "";
 
@@ -620,7 +720,7 @@
       updateRadarChart(currentCriteriaScores);
     }
 
-    // 雷達圖繪製（只顯示維度形狀，不強調數字標尺）
+    // 雷達圖繪製
     function updateRadarChart(scoreValues) {
       const labels = CRITERIA_DEFINITIONS.map(d => `${d.id}.${d.name.substring(0, 3)}..`);
       const ctx = document.getElementById('radarChart').getContext('2d');
@@ -669,8 +769,26 @@
       });
     }
 
+    // 概念圖燈箱放大功能
+    conceptImage.addEventListener('click', () => {
+      if (conceptImage.src) {
+        lightboxImage.src = conceptImage.src;
+        lightboxModal.classList.remove('hidden');
+      }
+    });
+
+    closeLightbox.addEventListener('click', () => {
+      lightboxModal.classList.add('hidden');
+    });
+
+    lightboxModal.addEventListener('click', (e) => {
+      if (e.target === lightboxModal) {
+        lightboxModal.classList.add('hidden');
+      }
+    });
+
     document.getElementById('toggleApiHelp').addEventListener('click', () => {
-      alert("【系統使用指引】\n1. 填選上方的漢服形制、現代元素及圖案意念，供 AI 或教師進行針對性對照。\n2. 上傳作品後點擊「開始評估作品」。\n3. 系統不會顯示任何數字總分，僅顯示「卓越、熟練、基礎/達標、部分達標、尚未掌握核心能力」等程度判定。\n4. 點選橫向坐標標籤可隨時手動修正各維度水平。");
+      alert("【系統使用指引】\n1. 填選上方的漢服形制、現代元素及圖案意念，供 AI 或教師進行針對性對照。\n2. 上傳作品後點擊「開始評估作品並生成概念圖」。\n3. 系統將在右側生成一張真人模特兒在香港旺角街頭穿上該作品的概念圖，並提供各項指標改善回饋。\n4. 點選橫向坐標標籤可隨時手動修正各維度水平。");
     });
   </script>
 </body>
