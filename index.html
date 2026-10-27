@@ -22,10 +22,16 @@
     .text-cinnabar { color: #a83836; }
     .bg-silk { background-color: #fdfbf7; }
 
+    /* 針對 iPad 觸控調整輸入元件尺寸 */
+    .touch-target {
+      min-height: 44px;
+    }
+
+    /* 橫向程度坐標按鈕樣式 */
     .level-step-btn {
       transition: all 0.2s ease;
       font-size: 11px;
-      padding: 4px 8px;
+      padding: 5px 9px;
       border-radius: 4px;
       cursor: pointer;
       user-select: none;
@@ -55,13 +61,14 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
+  <!-- 頂部導航列（支援電腦與平板適應） -->
   <header class="bg-silk border-b border-stone-200 sticky top-0 z-30 shadow-sm no-print">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
         <span class="w-2.5 h-6 bg-cinnabar rounded-sm inline-block"></span>
         <div>
           <h1 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 leading-tight">漢服現代融合設計 · 創作評分系統</h1>
-          <p class="text-[11px] text-stone-500">視覺藝術科 · 8項全維度水平評核</p>
+          <p class="text-[11px] text-stone-500">視覺藝術科 · 8項全維度水平評核 (iPad / 電腦通用版)</p>
         </div>
       </div>
       
@@ -69,13 +76,15 @@
         <label for="apiKeyInput" class="text-xs text-stone-600 font-medium shrink-0">Gemini Key：</label>
         <input type="password" id="apiKeyInput" placeholder="留空使用本地模擬評分" 
           class="border border-stone-300 rounded px-2.5 py-1 text-xs w-44 sm:w-56 focus:outline-none focus:ring-1 focus:ring-red-800 bg-white shadow-inner">
-        <button id="toggleApiHelp" class="px-2 text-stone-400 hover:text-stone-600 text-sm">ⓘ</button>
+        <button id="toggleApiHelp" class="touch-target px-2 text-stone-400 hover:text-stone-600 text-sm">ⓘ</button>
       </div>
     </div>
   </header>
 
+  <!-- 主內容容器 -->
   <main class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex-grow w-full">
 
+    <!-- 學生資訊列 -->
     <div class="bg-silk border border-stone-200 rounded-lg p-3 sm:p-4 mb-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-3 sm:gap-6 text-sm w-full sm:w-auto">
         <div class="flex items-center">
@@ -84,21 +93,21 @@
         </div>
         <div class="flex items-center">
           <label class="text-stone-500 font-medium mr-1 text-xs sm:text-sm">班別：</label>
-          <input type="text" id="studentClass" value="4A" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-20">
+          <input type="text" id="studentClass" value="4A" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-16">
         </div>
         <div class="text-xs sm:text-sm text-stone-600">
           <span class="text-stone-400">主題：</span>結合傳統漢服元素與現代審美
         </div>
       </div>
       <div class="no-print w-full sm:w-auto text-right">
-        <button onclick="window.print()" class="text-xs bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 px-3 py-1.5 rounded transition flex items-center justify-center gap-1.5 font-medium ml-auto">
+        <button onclick="window.print()" class="touch-target w-full sm:w-auto text-xs bg-stone-100 active:bg-stone-200 border border-stone-300 text-stone-700 px-3 py-2 rounded transition flex items-center justify-center gap-1.5 font-medium ml-auto">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
           列印 / 匯出 PDF 報告
         </button>
       </div>
     </div>
 
-    <!-- 設計意念輸入區 -->
+    <!-- 設計意念與元素選取區 (項目 3, 4, 5) -->
     <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 mb-6 shadow-sm">
       <h2 class="text-sm sm:text-base font-bold font-serif-tc text-stone-800 mb-3 flex items-center">
         <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>設計意念與元素選取
@@ -106,7 +115,7 @@
       
       <div class="space-y-4 text-xs">
         
-        <!-- 朝代特色選取 -->
+        <!-- 3. 傳統漢服特色選取（更新後選項內容） -->
         <div class="border border-stone-200 bg-white rounded p-3">
           <span class="font-bold text-stone-800 block mb-2 text-[13px]">1. 傳統漢服特色選取（可複選）：</span>
           
@@ -163,51 +172,11 @@
           </div>
         </div>
 
+        <!-- 4. 融合現代元素 + 5. 圖案概念輸入 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 現代元素 -->
           <div class="border border-stone-200 bg-white rounded p-3">
             <span class="font-bold text-stone-800 block mb-2 text-[13px]">2. 融合現代元素（可複選）：</span>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
               <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="口袋" class="rounded text-red-800">口袋</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="卡扣" class="rounded text-red-800">卡扣</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="彈性繩扣" class="rounded text-red-800">彈性繩扣</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="透視紗網" class="rounded text-red-800">透視紗網</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="金屬鍊條" class="rounded text-red-800">金屬鍊條</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拼布" class="rounded text-red-800">拼布</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="銀色金屬光澤塗層" class="rounded text-red-800">銀色金屬光澤塗層</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拉鍊" class="rounded text-red-800">拉鍊</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" id="modernCustomCheck" class="rounded text-red-800">自訂</label>
-            </div>
-            <input type="text" id="modernCustomInput" placeholder="請輸入自訂現代元素" 
-              class="mt-2 w-full border border-stone-200 rounded px-2 py-1 text-xs focus:outline-none focus:border-cinnabar hidden bg-stone-50">
-          </div>
-
-          <div class="border border-stone-200 bg-white rounded p-3 flex flex-col justify-between">
-            <div>
-              <span class="font-bold text-stone-800 block mb-2 text-[13px]">3. 圖案概念輸入（自訂輸入）：</span>
-              <p class="text-stone-400 mb-1.5">請簡述圖案設計靈感</p>
-              <textarea id="patternInput" rows="3" placeholder="在此輸入圖案意念..." 
-                class="w-full border border-stone-200 rounded p-2 text-xs focus:outline-none focus:border-cinnabar bg-stone-50 resize-none"></textarea>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <div class="lg:col-span-5 space-y-4 sm:space-y-6">
-        
-        <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 shadow-sm">
-          <h2 class="text-sm sm:text-base font-bold font-serif-tc text-stone-800 mb-2 sm:mb-3 flex items-center">
-            <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>作品圖片
-          </h2>
-          
-          <div id="dropZone" class="border-2 border-dashed border-stone-300 active:border-cinnabar transition-colors rounded-lg p-4 text-center cursor-pointer bg-white relative flex flex-col items-center justify-center min-h-[220px] sm:min-h-[260px]">
-            <input type="file" id="fileInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
-            
-            <div id="uploadPrompt" class="space-y-2 pointer-events-none">
-              <div class="mx-auto w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-stone-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              </div>
-              <p class="text-sm text-stone-700 font
+              <label class="flex items-center gap
