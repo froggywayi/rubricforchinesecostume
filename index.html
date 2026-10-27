@@ -106,7 +106,7 @@
       
       <div class="space-y-4 text-xs">
         
-        <!-- 更新後之朝代特色選取 -->
+        <!-- 朝代特色選取 -->
         <div class="border border-stone-200 bg-white rounded p-3">
           <span class="font-bold text-stone-800 block mb-2 text-[13px]">1. 傳統漢服特色選取（可複選）：</span>
           
@@ -145,4 +145,69 @@
             <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100">
               <span class="font-bold text-cinnabar block mb-1.5">d. 宋代</span>
               <div class="space-y-1">
-                <label class="flex items-center gap-
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-直領對襟" class="rounded text-red-800">直領對襟</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-窄袖緣邊" class="rounded text-red-800">窄袖緣邊</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-側衩與內層" class="rounded text-red-800">側衩與內層</label>
+              </div>
+            </div>
+
+            <!-- 明代 -->
+            <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100 md:col-span-2">
+              <span class="font-bold text-cinnabar block mb-1.5">e. 明代</span>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-直領對襟" class="rounded text-red-800">直領對襟</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-長短袖疊穿" class="rounded text-red-800">長短袖疊穿</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-中央與側摺" class="rounded text-red-800">中央與側摺</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border border-stone-200 bg-white rounded p-3">
+            <span class="font-bold text-stone-800 block mb-2 text-[13px]">2. 融合現代元素（可複選）：</span>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="口袋" class="rounded text-red-800">口袋</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="卡扣" class="rounded text-red-800">卡扣</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="彈性繩扣" class="rounded text-red-800">彈性繩扣</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="透視紗網" class="rounded text-red-800">透視紗網</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="金屬鍊條" class="rounded text-red-800">金屬鍊條</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拼布" class="rounded text-red-800">拼布</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="銀色金屬光澤塗層" class="rounded text-red-800">銀色金屬光澤塗層</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拉鍊" class="rounded text-red-800">拉鍊</label>
+              <label class="flex items-center gap-1.5"><input type="checkbox" id="modernCustomCheck" class="rounded text-red-800">自訂</label>
+            </div>
+            <input type="text" id="modernCustomInput" placeholder="請輸入自訂現代元素" 
+              class="mt-2 w-full border border-stone-200 rounded px-2 py-1 text-xs focus:outline-none focus:border-cinnabar hidden bg-stone-50">
+          </div>
+
+          <div class="border border-stone-200 bg-white rounded p-3 flex flex-col justify-between">
+            <div>
+              <span class="font-bold text-stone-800 block mb-2 text-[13px]">3. 圖案概念輸入（自訂輸入）：</span>
+              <p class="text-stone-400 mb-1.5">請簡述圖案設計靈感</p>
+              <textarea id="patternInput" rows="3" placeholder="在此輸入圖案意念..." 
+                class="w-full border border-stone-200 rounded p-2 text-xs focus:outline-none focus:border-cinnabar bg-stone-50 resize-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <div class="lg:col-span-5 space-y-4 sm:space-y-6">
+        
+        <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 shadow-sm">
+          <h2 class="text-sm sm:text-base font-bold font-serif-tc text-stone-800 mb-2 sm:mb-3 flex items-center">
+            <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>作品圖片
+          </h2>
+          
+          <div id="dropZone" class="border-2 border-dashed border-stone-300 active:border-cinnabar transition-colors rounded-lg p-4 text-center cursor-pointer bg-white relative flex flex-col items-center justify-center min-h-[220px] sm:min-h-[260px]">
+            <input type="file" id="fileInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+            
+            <div id="uploadPrompt" class="space-y-2 pointer-events-none">
+              <div class="mx-auto w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center text-stone-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <p class="text-sm text-stone-700 font
