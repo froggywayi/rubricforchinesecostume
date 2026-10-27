@@ -3,740 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>傳統漢服元素與現代審美融合設計 - 創作評分與香港街頭真人概念圖系統</title>
-  
-  <!-- Tailwind CSS -->
+  <title>傳統漢服元素與現代審美融合設計 - 創作評分系統</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            cinnabar: {
-              DEFAULT: '#a83836',
-              dark: '#862927',
-              50: '#fdf4f4'
-            },
-            silk: {
-              DEFAULT: '#fdfbf7',
-              card: '#faf7f0',
-              border: '#dfd8cc'
-            },
-            gold: '#c59b27'
-          },
-          fontFamily: {
-            serif: ['"Noto Serif TC"', 'serif'],
-            sans: ['"Noto Sans TC"', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
     body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #f7f5f0;
       color: #2b2b2b;
-      font-family: 'Noto Sans TC', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
     .font-serif-tc { font-family: 'Noto Serif TC', serif; }
+    .border-cinnabar { border-color: #a83836; }
+    .bg-cinnabar { background-color: #a83836; }
+    .text-cinnabar { color: #a83836; }
+    .bg-silk { background-color: #fdfbf7; }
 
     .level-step-btn {
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
       font-size: 11px;
       padding: 4px 8px;
       border-radius: 4px;
       cursor: pointer;
       user-select: none;
       white-space: nowrap;
-      border: 1px solid transparent;
     }
     .level-step-btn.active {
       background-color: #a83836;
       color: #ffffff;
       font-weight: 700;
-      border-color: #862927;
+      box-shadow: 0 1px 3px rgba(168, 56, 54, 0.3);
     }
     .level-step-btn.inactive {
-      background-color: #ece6d8;
-      color: #555;
+      background-color: #f3f0e6;
+      color: #666;
     }
     .level-step-btn.inactive:hover {
-      background-color: #e2dbcb;
+      background-color: #e8e2d2;
       color: #222;
     }
 
     @media print {
       .no-print { display: none !important; }
-      body { background-color: #ffffff !important; }
-      .print-break { page-break-inside: avoid; }
+      body { background-color: #ffffff; color: #000000; }
+      .print-page-break { page-break-inside: avoid; }
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
-  <!-- 頂部工具列 -->
-  <header class="bg-silk border-b border-silk-border sticky top-0 z-30 shadow-sm no-print">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+  <header class="bg-silk border-b border-stone-200 sticky top-0 z-30 shadow-sm no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
-        <span class="w-2.5 h-7 bg-cinnabar rounded-xs inline-block"></span>
+        <span class="w-2.5 h-6 bg-cinnabar rounded-sm inline-block"></span>
         <div>
-          <h1 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 leading-tight">
-            漢服現代融合設計 · 創作評分與實景概念圖系統
-          </h1>
-          <p class="text-[11px] text-stone-500">視覺藝術科校本評核 · 8項全維度水平基準</p>
+          <h1 class="text-base sm:text-lg font-bold font-serif-tc text-stone-800 leading-tight">漢服現代融合設計 · 創作評分系統</h1>
+          <p class="text-[11px] text-stone-500">視覺藝術科 · 8項全維度水平評核</p>
         </div>
       </div>
       
-      <div class="flex items-center gap-2.5 flex-wrap justify-end">
-        <button onclick="loadAquaCloudDemoScenario()" 
-          class="px-3 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-300 text-teal-900 text-xs font-serif font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95">
-          <i class="fa-solid fa-cloud text-teal-600"></i> 載入水藍祥雲實景示範（香港都會階梯）
-        </button>
-
-        <button onclick="loadPokerDemoScenario()" 
-          class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-medium transition flex items-center gap-1">
-          <i class="fa-solid fa-shapes text-stone-500"></i> 旺角街頭示範
-        </button>
-
-        <div class="hidden sm:flex items-center gap-1.5 bg-stone-100 px-2 py-1 rounded-md border border-stone-200">
-          <label for="apiKeyInput" class="text-[11px] text-stone-600 font-medium">Gemini Key：</label>
-          <input type="password" id="apiKeyInput" placeholder="留空使用本地模擬" 
-            class="bg-white border border-stone-300 rounded px-2 py-0.5 text-xs w-32 focus:outline-none focus:border-cinnabar">
-        </div>
-
-        <button onclick="window.print()" 
-          class="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 text-xs font-medium transition flex items-center gap-1.5">
-          <i class="fa-solid fa-print"></i> 列印 / 匯出 PDF
-        </button>
+      <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+        <label for="apiKeyInput" class="text-xs text-stone-600 font-medium shrink-0">Gemini Key：</label>
+        <input type="password" id="apiKeyInput" placeholder="留空使用本地模擬評分" 
+          class="border border-stone-300 rounded px-2.5 py-1 text-xs w-44 sm:w-56 focus:outline-none focus:ring-1 focus:ring-red-800 bg-white shadow-inner">
+        <button id="toggleApiHelp" class="px-2 text-stone-400 hover:text-stone-600 text-sm">ⓘ</button>
       </div>
     </div>
   </header>
 
-  <!-- 主內容區 -->
-  <main class="max-w-7xl mx-auto px-4 py-5 flex-grow w-full space-y-5">
+  <main class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex-grow w-full">
 
-    <!-- 學生基本資訊 -->
-    <div class="bg-silk border border-silk-border rounded-lg p-3 sm:p-4 shadow-sm flex flex-wrap items-center justify-between gap-3 text-sm">
-      <div class="flex flex-wrap items-center gap-4 sm:gap-6">
-        <div>
-          <label class="text-stone-500 text-xs font-medium">學生姓名：</label>
-          <input type="text" id="studentName" value="陳同學" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-24">
+    <div class="bg-silk border border-stone-200 rounded-lg p-3 sm:p-4 mb-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-3 sm:gap-6 text-sm w-full sm:w-auto">
+        <div class="flex items-center">
+          <label class="text-stone-500 font-medium mr-1 text-xs sm:text-sm">學生：</label>
+          <input type="text" id="studentName" value="學生姓名" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-24">
         </div>
-        <div>
-          <label class="text-stone-500 text-xs font-medium">班別：</label>
-          <input type="text" id="studentClass" value="4A (12)" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-20">
+        <div class="flex items-center">
+          <label class="text-stone-500 font-medium mr-1 text-xs sm:text-sm">班別：</label>
+          <input type="text" id="studentClass" value="4A" class="border-b border-stone-300 bg-transparent px-1 py-0.5 focus:border-cinnabar focus:outline-none font-medium w-20">
         </div>
-        <div>
-          <label class="text-stone-500 text-xs font-medium">創作主題：</label>
-          <span class="text-stone-800 font-medium">結合傳統漢服元素與現代審美的個人創作</span>
+        <div class="text-xs sm:text-sm text-stone-600">
+          <span class="text-stone-400">主題：</span>結合傳統漢服元素與現代審美
         </div>
       </div>
-      <div class="text-[11px] text-stone-400 font-serif">
-        * 評核採用橫向程度坐標，不呈現阿拉伯數字總分
+      <div class="no-print w-full sm:w-auto text-right">
+        <button onclick="window.print()" class="text-xs bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 px-3 py-1.5 rounded transition flex items-center justify-center gap-1.5 font-medium ml-auto">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+          列印 / 匯出 PDF 報告
+        </button>
       </div>
     </div>
 
-    <!-- 設計意念與元素選取 -->
-    <div class="bg-silk border border-silk-border rounded-lg p-4 shadow-sm text-xs space-y-4">
-      <h2 class="text-sm font-bold font-serif-tc text-stone-800 flex items-center">
+    <!-- 設計意念輸入區 -->
+    <div class="bg-silk border border-stone-200 rounded-lg p-4 sm:p-5 mb-6 shadow-sm">
+      <h2 class="text-sm sm:text-base font-bold font-serif-tc text-stone-800 mb-3 flex items-center">
         <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>設計意念與元素選取
       </h2>
-
-      <!-- 1. 傳統漢服特色選取 (五個朝代) -->
-      <div class="bg-white border border-stone-200 rounded p-3">
-        <span class="font-bold text-stone-800 block mb-2 text-xs">1. 傳統漢服特色選取（多選）：</span>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-          
-          <div class="bg-stone-50/70 p-2 rounded border border-stone-100">
-            <span class="font-bold text-cinnabar block mb-1">a. 秦漢時期</span>
-            <div class="space-y-1">
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-深衣" class="rounded text-red-800">深衣</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-上下分裁" class="rounded text-red-800">上下分裁</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-衣裳相連" class="rounded text-red-800">衣裳相連</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-曲裾" class="rounded text-red-800">曲裾</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-直裾" class="rounded text-red-800">直裾</label>
-            </div>
-          </div>
-
-          <div class="bg-stone-50/70 p-2 rounded border border-stone-100">
-            <span class="font-bold text-cinnabar block mb-1">b. 魏晉南北朝</span>
-            <div class="space-y-1">
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-崇尚寬袖大衣" class="rounded text-red-800">崇尚寬袖大衣</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-輕薄透氣的麻" class="rounded text-red-800">輕薄透氣的麻</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-輕薄透氣的絹" class="rounded text-red-800">輕薄透氣的絹</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-飄逸寬博" class="rounded text-red-800">飄逸寬博</label>
-            </div>
-          </div>
-
-          <div class="bg-stone-50/70 p-2 rounded border border-stone-100">
-            <span class="font-bold text-cinnabar block mb-1">c. 唐代</span>
-            <div class="space-y-1">
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-短襦裙" class="rounded text-red-800">短襦裙</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-長裙" class="rounded text-red-800" checked>長裙</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-圓領袍" class="rounded text-red-800">圓領袍</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-低胸裝" class="rounded text-red-800">低胸裝</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-短袖外衣" class="rounded text-red-800" checked>短袖外衣</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-色彩鮮艷大膽" class="rounded text-red-800">色彩鮮艷大膽</label>
-            </div>
-          </div>
-
-          <div class="bg-stone-50/70 p-2 rounded border border-stone-100">
-            <span class="font-bold text-cinnabar block mb-1">d. 宋代</span>
-            <div class="space-y-1">
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-宋制襦裙" class="rounded text-red-800">宋制襦裙</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-背子" class="rounded text-red-800">背子（對襟、直領、兩腋開衩、衣長過膝）</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="宋代-修長簡潔" class="rounded text-red-800" checked>修長簡潔</label>
-            </div>
-          </div>
-
-          <div class="bg-stone-50/70 p-2 rounded border border-stone-100">
-            <span class="font-bold text-cinnabar block mb-1">e. 明代</span>
-            <div class="space-y-1">
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-交領右衽" class="rounded text-red-800">交領右衽</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-圓領" class="rounded text-red-800">圓領</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-馬面裙" class="rounded text-red-800" checked>馬面裙（前後平面、兩側打褶）</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-直身" class="rounded text-red-800">直身</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-大袖禮服" class="rounded text-red-800">大袖禮服</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-剪裁寬鬆" class="rounded text-red-800">剪裁寬鬆</label>
-              <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="明代-刺繡" class="rounded text-red-800">刺繡</label>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 2. 現代元素 + 3. 圖案概念 -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div class="md:col-span-7 bg-white border border-stone-200 rounded p-3">
-          <span class="font-bold text-stone-800 block mb-2 text-xs">2. 融合現代元素（多選）：</span>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="口袋" class="rounded text-red-800">口袋</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="卡扣" class="rounded text-red-800">卡扣</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="彈性繩扣" class="rounded text-red-800">彈性繩扣</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="透視紗網" class="rounded text-red-800">透視紗網</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="金屬鍊條" class="rounded text-red-800" checked>金屬鍊條</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拼布" class="rounded text-red-800" checked>拼布</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="銀色金屬光澤塗層" class="rounded text-red-800">銀色金屬光澤塗層</label>
-            <label class="flex items-center gap-1.5"><input type="checkbox" name="modern_element" value="拉鍊" class="rounded text-red-800">拉鍊</label>
-            <label class="flex items-center gap-1.5 font-bold text-cinnabar"><input type="checkbox" id="modernCustomCheck" class="rounded text-red-800" checked>自訂</label>
-          </div>
-          <div id="modernCustomBox" class="mt-2">
-            <input type="text" id="modernCustomInput" value="現代襯衫翻領（西裝領）、綁帶短靴（馬汀靴）" 
-              placeholder="輸入自訂現代元素..." 
-              class="w-full border border-stone-300 rounded px-2.5 py-1 text-xs focus:outline-none focus:border-cinnabar bg-stone-50">
-          </div>
-        </div>
-
-        <div class="md:col-span-5 bg-white border border-stone-200 rounded p-3 flex flex-col justify-between">
-          <div>
-            <span class="font-bold text-stone-800 block mb-1 text-xs">3. 圖案概念輸入（自訂輸入）：</span>
-            <textarea id="patternInput" rows="3" placeholder="在此輸入圖案靈感..." 
-              class="w-full border border-stone-300 rounded p-2 text-xs focus:outline-none focus:border-cinnabar bg-stone-50 resize-none leading-relaxed">西洋撲克牌（黑桃A、梅花A、方塊等紙牌圖樣）結合東方傳統海浪山水波紋、雲紋，以及下擺邊緣的回紋飾邊。</textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 評估與成果展示區 -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
       
-      <!-- 左欄：手繪稿 + 能力分佈 (5 cols) -->
-      <div class="lg:col-span-5 space-y-4">
+      <div class="space-y-4 text-xs">
         
-        <div class="bg-silk border border-silk-border rounded-lg p-4 shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="text-sm font-bold font-serif-tc text-stone-800 flex items-center">
-              <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>作品手繪圖
-            </h2>
-            <span class="text-[11px] text-stone-400">支援拍照上傳</span>
-          </div>
+        <!-- 更新後之朝代特色選取 -->
+        <div class="border border-stone-200 bg-white rounded p-3">
+          <span class="font-bold text-stone-800 block mb-2 text-[13px]">1. 傳統漢服特色選取（可複選）：</span>
           
-          <div id="dropZone" class="border-2 border-dashed border-stone-300 active:border-cinnabar rounded-lg p-3 text-center cursor-pointer bg-white relative flex flex-col items-center justify-center min-h-[170px] overflow-hidden">
-            <input type="file" id="fileInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
-            
-            <div id="uploadPrompt" class="space-y-1 pointer-events-none hidden">
-              <i class="fa-solid fa-camera text-xl text-stone-400"></i>
-              <p class="text-xs text-stone-600 font-medium">點擊拍照或上傳圖檔</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <!-- 秦漢 -->
+            <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100">
+              <span class="font-bold text-cinnabar block mb-1.5">a. 秦漢時期</span>
+              <div class="space-y-1">
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-交領右衽" class="rounded text-red-800">交領右衽</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-袖口緣邊" class="rounded text-red-800">袖口緣邊</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="秦漢-直裾下擺" class="rounded text-red-800">直裾下擺</label>
+              </div>
             </div>
 
-            <div id="previewContainer" class="w-full flex flex-col items-center">
-              <img id="imagePreview" src="" alt="手繪稿件" class="max-h-48 w-auto object-contain rounded border border-stone-200">
-            </div>
-          </div>
-
-          <button id="btnEvaluate" onclick="triggerAssessment()" 
-            class="mt-3 w-full bg-cinnabar hover:bg-cinnabar-dark text-white py-2 rounded font-medium text-xs tracking-wide shadow transition flex items-center justify-center gap-2">
-            <span id="btnEvaluateText">開始評估作品並生成概念圖</span>
-            <div id="evalSpinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          </button>
-        </div>
-
-        <!-- 能力維度分佈 (去數值化) -->
-        <div id="summaryCard" class="bg-silk border border-silk-border rounded-lg p-4 shadow-sm print-break">
-          <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-stone-200">
-            <h2 class="text-sm font-bold font-serif-tc text-stone-800 flex items-center">
-              <span class="w-2 h-2 bg-cinnabar rounded-full mr-2"></span>能力維度分佈
-            </h2>
-            <span class="text-[11px] text-stone-400">8項指標表現</span>
-          </div>
-
-          <div class="bg-stone-50 p-3 rounded border border-stone-200 mb-3 text-center">
-            <p class="text-[11px] text-stone-500 mb-1">作品整體表現程度</p>
-            <div id="overallBadge" class="inline-block px-4 py-1 rounded-full text-xs font-bold text-white shadow-xs">
-              熟練
-            </div>
-            
-            <div class="mt-2 pt-2 border-t border-stone-200 text-[10px] text-stone-500 flex flex-wrap justify-center gap-1.5">
-              <span id="tier5" class="px-1.5 py-0.5 rounded">卓越</span>
-              <span class="text-stone-300">›</span>
-              <span id="tier4" class="px-1.5 py-0.5 rounded">熟練</span>
-              <span class="text-stone-300">›</span>
-              <span id="tier3" class="px-1.5 py-0.5 rounded">基礎 / 達標</span>
-              <span class="text-stone-300">›</span>
-              <span id="tier2" class="px-1.5 py-0.5 rounded">部分達標</span>
-              <span class="text-stone-300">›</span>
-              <span id="tier1" class="px-1.5 py-0.5 rounded">尚未掌握核心能力</span>
-            </div>
-          </div>
-
-          <div class="w-full h-52">
-            <canvas id="radarChart"></canvas>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- 右欄：香港街頭真人模特兒實景圖 + 8 項程度坐標 (7 cols) -->
-      <div class="lg:col-span-7 space-y-4">
-        
-        <!-- 香港街頭真人模特兒實景概念圖 -->
-        <div id="modelCard" class="bg-silk border border-silk-border rounded-lg p-4 shadow-sm print-break">
-          <div class="flex items-center justify-between border-b border-stone-200 pb-2 mb-2.5">
-            <div>
-              <h2 class="text-sm font-bold font-serif-tc text-stone-800 flex items-center">
-                <span class="w-2 h-2 bg-teal-600 rounded-full mr-2 animate-pulse"></span>香港實景真人模特兒穿著概念圖
-              </h2>
-              <p class="text-[11px] text-stone-500" id="modelLocationLabel">香港當代建築室外階梯 · 新國風高級訂製日常著裝模擬</p>
-            </div>
-            <span class="text-[10px] px-2 py-0.5 bg-teal-100 text-teal-800 rounded font-medium" id="modelBadgeTag">都會實景模擬</span>
-          </div>
-
-          <div class="relative bg-stone-900 rounded-lg overflow-hidden flex items-center justify-center min-h-[340px]">
-            <div id="genOverlay" class="absolute inset-0 bg-stone-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-4 hidden">
-              <div class="w-8 h-8 border-3 border-teal-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-              <p class="text-xs font-semibold text-white font-serif-tc">正在將設計手稿轉化為香港都會街景真人實裝效果...</p>
+            <!-- 魏晉南北朝 -->
+            <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100">
+              <span class="font-bold text-cinnabar block mb-1.5">b. 魏晉南北朝</span>
+              <div class="space-y-1">
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-窄袖襦" class="rounded text-red-800">窄袖襦</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-襦裙分層" class="rounded text-red-800">襦裙分層</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="魏晉-及地長裙" class="rounded text-red-800">及地長裙</label>
+              </div>
             </div>
 
-            <img id="streetModelImg" src="" alt="香港實景真人模特兒概念圖" 
-              class="w-full h-auto object-cover max-h-[520px] cursor-zoom-in transition duration-300 hover:scale-[1.01]"
-              onclick="openLightbox(this.src)">
-
-            <button onclick="openLightbox(document.getElementById('streetModelImg').src)" 
-              class="no-print absolute bottom-2 right-2 bg-black/60 hover:bg-black/80 text-white text-[10px] px-2 py-1 rounded backdrop-blur-xs flex items-center gap-1">
-              <i class="fa-solid fa-expand"></i> 點擊放大檢視細節
-            </button>
-          </div>
-          <div class="flex flex-wrap justify-between items-center mt-2 text-[11px] text-stone-400">
-            <span id="modelDetailNotes">※ 著裝細節：高掛立領、流仙紗露肩披肩、水藍緞面長裙、粉白祥雲刺繡波紋</span>
-            <span class="text-stone-500 font-serif">香港當代都會建築背景</span>
-          </div>
-        </div>
-
-        <!-- 8 項指標與橫向程度坐標 -->
-        <div class="bg-silk border border-silk-border rounded-lg p-4 shadow-sm">
-          <div class="flex items-center justify-between border-b border-stone-200 pb-2 mb-3">
-            <h2 class="text-sm font-bold font-serif-tc text-stone-800">各項評審指標與改善意見</h2>
-            <span class="text-[10px] px-2 py-0.5 bg-stone-100 text-stone-600 rounded">橫向坐標評定</span>
-          </div>
-
-          <div id="criteriaList" class="space-y-3">
-            <!-- 指標卡片清單 -->
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </main>
-
-  <!-- 燈箱 -->
-  <div id="lightbox" class="fixed inset-0 bg-black/85 z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
-    <div class="relative max-w-3xl max-h-[90vh]" onclick="event.stopPropagation()">
-      <button onclick="closeLightbox()" class="absolute -top-8 right-0 text-white text-xl hover:text-stone-300">&times;</button>
-      <img id="lightboxImg" src="" alt="放大預覽" class="max-h-[85vh] max-w-full rounded object-contain border border-stone-700">
-    </div>
-  </div>
-
-  <footer class="bg-stone-100 border-t border-stone-200 py-3 text-center text-[11px] text-stone-500 no-print mt-auto">
-    漢服現代融合設計評分系統 · 視覺藝術素養導向評量
-  </footer>
-
-  <script>
-    const SCALE_LEVELS = [
-      { score: 5, label: "展示豐富而全面地運用" },
-      { score: 4, label: "良好運用" },
-      { score: 3, label: "有效地運用" },
-      { score: 2, label: "局部地運用" },
-      { score: 1, label: "可見嘗試運用，但仍需改善" },
-      { score: 0, label: "從沒運用" }
-    ];
-
-    const CRITERIA_DEFINITIONS = [
-      { id: 1, category: "主題與元素融合", name: "傳統漢服形制與特徵呈現", guide: "交領右衽、對襟、立領、馬面裙等形制特徵交代。" },
-      { id: 2, category: "主題與元素融合", name: "現代審美與時尚感結合", guide: "當代剪裁、露肩剪裁、高級禮服化與現代配飾搭配協調度。" },
-      { id: 3, category: "文化轉化與功能設計", name: "文化符號與紋樣當代轉化", guide: "傳統祥雲紋、流水紋飾與當代立體浮雕/刺繡的重構轉化。" },
-      { id: 4, category: "文化轉化與功能設計", name: "服裝結構邏輯與材質表現", guide: "穿戴結構合理性，以及薄紗、緞面光澤與刺繡質感描繪。" },
-      { id: 5, category: "構圖與創意表現", name: "獨特創意與概念設計", guide: "破除刻板印象的新穎構想，水藍與粉色大膽撞色與意境營造。" },
-      { id: 6, category: "構圖與創意表現", name: "人物動態與版面構圖", guide: "人體比例、立體姿態優雅度與階梯縱向視線延伸張力。" },
-      { id: 7, category: "繪畫與技法", name: "線條清晰度與細節勾勒", guide: "輪廓流暢度、飄逸披肩垂墜線條與如意雲紋波浪滾邊處理。" },
-      { id: 8, category: "繪畫與技法", name: "色彩漸變與立體光影", guide: "水藍綢緞受光高光、粉白雲紋明暗浮雕感與層次表現。" }
-    ];
-
-    // 水藍祥雲香港都會階梯示範資料 (參考最新附件圖)
-    const AQUA_CLOUD_DEMO = {
-      scores: [5, 5, 5, 4, 5, 4, 4, 5], // 總計 37 分 (卓越區間: 33-40)
-      feedbacks: [
-        "出色傳承漢服立領、修長簡潔線條與內外疊穿的下裳結構，形制掌握極富文化底蘊。",
-        "大膽結合現代晚禮服削肩露肩剪裁與流仙飄紗，展現高雅俐落的當代新國風時尚美學。",
-        "立體粉白祥雲與靈動水波紋由上而下漸層展開，傳統吉慶符號轉化具強烈現代藝術感。",
-        "精準交代了水藍緞面光澤、輕薄透氣透明縐紗與刺繡厚度的材質對比，結構邏輯嚴密。",
-        "手提透明金魚水缽配飾極富東方浪漫意境，徹底破除傳統古裝刻板印象，原創性極高。",
-        "人物姿態自然端莊，與當代都會室外階梯背景的縱深引導線相得益彰，構圖張弛有度。",
-        "如意雲朵曲折輪廓與衣褶垂墜感線條極為清晰順暢，滾邊細節描繪精緻嚴謹。",
-        "水藍色緞面光影流轉自然，粉紅與純白色塊對比鮮明，雲紋立體厚度感營造極為出色。"
-      ],
-      handDrawingSvg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 700" width="100%" height="100%"><rect width="500" height="700" fill="%23fcfbfa"/><text x="290" y="38" font-size="11" fill="%23666" font-family="sans-serif">現代元素: 露肩剪裁、金魚水缽、立體雲紋</text><circle cx="250" cy="110" r="26" fill="%23fae5d3" stroke="%23333"/><path d="M225 105 Q250 68 275 105 Q285 140 270 145 Q250 135 230 145 Z" fill="%233e2723"/><circle cx="250" cy="72" r="14" fill="%233e2723"/><path d="M240 134 L260 134 L264 146 L236 146 Z" fill="%2348c9b0" stroke="%23c0392b" stroke-width="1.5"/><path d="M236 146 L215 178 L285 178 L264 146 Z" fill="%2376d7c4"/><path d="M205 178 L155 210 L165 340 L195 300 Z" fill="%23a3e4d7" opacity="0.75" stroke="%2316a085"/><path d="M295 178 L345 210 L335 340 L305 300 Z" fill="%23a3e4d7" opacity="0.75" stroke="%2316a085"/><path d="M220 178 L155 580 Q250 620 345 580 L280 178 Z" fill="%23a2d9ce" stroke="%2316a085"/><path d="M165 570 L145 615 Q250 645 355 615 L335 570 Z" fill="%23f1948a"/><path d="M190 280 Q250 250 310 280 Q325 380 300 460 Q250 510 200 460 Q175 380 190 280 Z" fill="%2376d7c4" stroke="%23117864" stroke-width="1.5"/><path d="M230 330 Q250 315 270 330 Q285 340 270 355 Q250 345 230 355 Z" fill="%23e84393" stroke="%23fff" stroke-width="2"/><path d="M210 430 Q250 395 290 430 Q305 455 285 470 Q250 455 215 470 Z" fill="%23e84393" stroke="%23fff" stroke-width="2.5"/><circle cx="250" cy="285" r="16" fill="%23d4efdf" stroke="%2327ae60" stroke-dasharray="3,2"/><circle cx="250" cy="285" r="4" fill="%23e74c3c"/></svg>`,
-      streetModelSvg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="100%" height="100%"><rect width="600" height="900" fill="%232c3e50"/><defs><linearGradient id="glassWall" x1="0" y1="0" x2="1" y2="1"><stop offset="0%23" stop-color="%23283747"/><stop offset="50%23" stop-color="%2334495e"/><stop offset="100%23" stop-color="%231b2631"/></linearGradient><linearGradient id="silkAqua" x1="0" y1="0" x2="1" y2="0"><stop offset="0%23" stop-color="%2368d8d6"/><stop offset="50%23" stop-color="%23a4f6f9"/><stop offset="100%23" stop-color="%2348bfe3"/></linearGradient><linearGradient id="chiffon" x1="0" y1="0" x2="0" y2="1"><stop offset="0%23" stop-color="%23cbf3f0" stop-opacity="0.85"/><stop offset="100%23" stop-color="%2364dfdf" stop-opacity="0.45"/></linearGradient></defs><rect x="0" y="0" width="600" height="420" fill="url(%23glassWall)"/><line x1="120" y1="0" x2="120" y2="420" stroke="%2317202a" stroke-width="3"/><line x1="280" y1="0" x2="280" y2="420" stroke="%2317202a" stroke-width="3"/><line x1="440" y1="0" x2="440" y2="420" stroke="%2317202a" stroke-width="3"/><line x1="0" y1="140" x2="600" y2="140" stroke="%2317202a" stroke-width="3"/><line x1="0" y1="280" x2="600" y2="280" stroke="%2317202a" stroke-width="3"/><polygon points="0,420 600,280 600,900 0,900" fill="%237f8c8d"/><path d="M0 420 L600 280 L600 320 L0 460 Z" fill="%23bdc3c7"/><path d="M0 460 L600 320 L600 360 L0 500 Z" fill="%2395a5a6"/><path d="M0 500 L600 360 L600 400 L0 540 Z" fill="%23bdc3c7"/><path d="M0 540 L600 400 L600 440 L0 580 Z" fill="%2395a5a6"/><path d="M0 580 L600 440 L600 480 L0 620 Z" fill="%23bdc3c7"/><path d="M0 620 L600 480 L600 520 L0 660 Z" fill="%2395a5a6"/><path d="M0 660 L600 520 L600 560 L0 700 Z" fill="%23bdc3c7"/><path d="M0 700 L600 560 L600 600 L0 740 Z" fill="%2395a5a6"/><path d="M0 740 L600 600 L600 640 L0 780 Z" fill="%23bdc3c7"/><path d="M0 780 L600 640 L600 680 L0 820 Z" fill="%2395a5a6"/><path d="M0 820 L600 680 L600 720 L0 860 Z" fill="%23bdc3c7"/><path d="M0 860 L600 720 L600 760 L0 900 Z" fill="%2395a5a6"/><path d="M60 380 Q320 220 580 480" fill="none" stroke="%23ecf0f1" stroke-width="14"/><path d="M60 410 Q320 250 580 510" fill="none" stroke="%23bdc3c7" stroke-width="8"/><g transform="translate(160, 80)"><ellipse cx="140" cy="80" rx="36" ry="46" fill="%23f8d7c4"/><ellipse cx="140" cy="30" rx="28" ry="24" fill="%231a1a1a"/><path d="M104 65 Q140 25 176 65 Q184 140 170 170 Q140 160 110 170 Z" fill="%232c1b18"/><path d="M125 125 L155 125 L158 140 L122 140 Z" fill="%2356cfe1" stroke="%23e63946" stroke-width="2"/><path d="M122 140 L95 185 L185 185 L158 140 Z" fill="url(%23silkAqua)"/><path d="M80 180 Q30 220 30 350 Q55 420 75 320 Q80 230 110 200 Z" fill="url(%23chiffon)" stroke="%23a4f6f9" stroke-width="1.5"/><path d="M200 180 Q250 220 250 350 Q225 420 205 320 Q200 230 170 200 Z" fill="url(%23chiffon)" stroke="%23a4f6f9" stroke-width="1.5"/><path d="M85 710 Q140 760 215 710 L235 600 L45 600 Z" fill="%23e57373"/><path d="M95 185 L45 670 Q140 710 235 670 L185 185 Z" fill="url(%23silkAqua)" stroke="%2348bfe3" stroke-width="2"/><path d="M65 240 Q140 200 215 240 Q235 350 220 460 Q240 560 210 650 Q140 690 70 650 Q40 560 60 460 Q45 350 65 240 Z" fill="%2368d8d6" stroke="%23ffffff" stroke-width="4"/><path d="M120 310 Q140 280 170 300 Q190 325 160 345 Q135 340 120 310 Z" fill="%23e84393" stroke="%23ffffff" stroke-width="3"/><path d="M110 490 Q150 440 190 480 Q215 525 175 555 Q130 545 110 490 Z" fill="%23e84393" stroke="%23ffffff" stroke-width="4"/><path d="M148 345 Q170 410 135 435 Q170 450 150 485" fill="none" stroke="%23ffffff" stroke-width="6"/><circle cx="140" cy="275" r="22" fill="%23e8f8f5" opacity="0.85" stroke="%2348bfe3" stroke-width="2"/><circle cx="140" cy="275" r="6" fill="%23e74c3c"/><line x1="140" y1="210" x2="140" y2="253" stroke="%23c0392b" stroke-width="2"/></g></svg>`
-    };
-
-    // 旺角街頭示範資料
-    const POKER_DEMO = {
-      scores: [4, 4, 4, 3, 4, 4, 3, 4],
-      feedbacks: [
-        "馬面裙特徵明確，繫帶與裙門前後平整對稱，形制交代清晰。",
-        "西裝翻領與綁帶短靴結合自然，具備當代實穿時尚感。",
-        "將西洋撲克牌與傳統海浪紋樣拼接轉化大膽新穎，符號對比強烈。",
-        "外搭坎肩疊穿邏輯合理，布料軟硬質地若進一步區分會更生動。",
-        "跳脫傳統舞台古裝沉重感，整體構思具備潮流感與原創亮點。",
-        "人物步態大方自然，與旺角街頭空間呼應良好，主次焦點分明。",
-        "外輪廓線流暢俐落，褶皺線條處理得當，細部重疊線條可再簡化。",
-        "黃粉與藍色漸變和諧耐看，適當加強暗部陰影將使立體厚度更鮮明。"
-      ],
-      handDrawingSvg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 700" width="100%" height="100%"><rect width="500" height="700" fill="%23ffffff"/><text x="340" y="40" font-size="11" fill="%23777" font-family="sans-serif">現代元素: 西裝領、撲克牌、金屬鍊、短靴</text><path d="M210 180 Q250 150 290 180 L320 250 L180 250 Z" fill="%23f2eedb" stroke="%23333" stroke-width="2"/><polygon points="235,160 250,185 265,160" fill="%23ffffff" stroke="%23333"/><line x1="225" y1="190" x2="275" y2="235" stroke="%23c59b27" stroke-width="2"/><line x1="275" y1="190" x2="225" y2="235" stroke="%23c59b27" stroke-width="2"/><circle cx="225" cy="190" r="3.5" fill="%23c59b27"/><circle cx="275" cy="190" r="3.5" fill="%23c59b27"/><circle cx="225" cy="235" r="3.5" fill="%23c59b27"/><circle cx="275" cy="235" r="3.5" fill="%23c59b27"/><path d="M180 200 L90 230 L110 330 L170 310 Z" fill="%235dade2" stroke="%23333"/><path d="M320 200 L410 230 L390 330 L330 310 Z" fill="%23f1948a" stroke="%23333"/><circle cx="250" cy="115" r="28" fill="%23fdebd0" stroke="%23333"/><rect x="215" y="250" width="70" height="14" fill="%23f9d5d5" stroke="%23a83836"/><path d="M180 264 L130 550 Q250 580 370 550 L320 264 Z" fill="%23fff6d1" stroke="%23333"/><rect x="190" y="370" width="45" height="60" fill="%23fff" stroke="%23222" rx="3"/><text x="195" y="390" font-size="13" font-weight="bold" fill="%23111">A♠</text><rect x="265" y="370" width="45" height="60" fill="%23fff" stroke="%23222" rx="3"/><text x="270" y="390" font-size="13" font-weight="bold" fill="%23a83836">A♣</text><path d="M380 520 L425 520 L425 580 L370 580 Z" fill="%23c49a6c" stroke="%23333" stroke-width="1.5"/></svg>`,
-      streetModelSvg: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%"><rect width="600" height="800" fill="%23222"/><rect x="0" y="0" width="220" height="800" fill="%239a7b66"/><rect x="380" y="0" width="220" height="800" fill="%23768794"/><rect x="140" y="140" width="120" height="55" rx="3" fill="%23a83836" stroke="%23ffd700" stroke-width="2.5"/><text x="155" y="178" font-size="26" font-weight="bold" fill="%23ffd700" font-family="Noto Serif TC, serif">旺角店</text><rect x="420" y="210" width="130" height="220" rx="8" fill="%23d4ac0d" stroke="%23111"/><rect x="440" y="390" width="100" height="70" rx="6" fill="%23c0392b" stroke="%23111"/><text x="468" y="435" font-size="14" font-weight="bold" fill="%23fff">TAXI</text><rect x="0" y="480" width="600" height="320" fill="%23555"/><g transform="translate(140, 90)"><ellipse cx="160" cy="80" rx="34" ry="44" fill="%23f5cba7"/><path d="M100 130 L160 115 L220 130 L250 200 L70 200 Z" fill="%23ffffff" stroke="%23333"/><rect x="110" y="195" width="100" height="15" fill="%23f5b7b1"/><path d="M80 210 L30 520 Q160 550 290 520 L240 210 Z" fill="%23f9e79f" stroke="%23d4ac0d" stroke-width="1.5"/><rect x="95" y="320" width="55" height="75" fill="%23fff" stroke="%23222" rx="4"/><text x="100" y="348" font-size="18" font-weight="bold" fill="%23111">A♠</text><rect x="170" y="320" width="55" height="75" fill="%23fff" stroke="%23222" rx="4"/><text x="175" y="348" font-size="18" font-weight="bold" fill="%23c0392b">A♣</text></g></svg>`
-    };
-
-    let currentScores = [...AQUA_CLOUD_DEMO.scores];
-    let currentFeedbacks = [...AQUA_CLOUD_DEMO.feedbacks];
-    let currentScenario = 'aqua'; // 'aqua' | 'poker'
-    let radarChartInstance = null;
-
-    window.onload = function() {
-      setupEvents();
-      loadAquaCloudDemoScenario();
-    };
-
-    function setupEvents() {
-      const dropZone = document.getElementById('dropZone');
-      const fileInput = document.getElementById('fileInput');
-
-      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-cinnabar'); });
-      dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-cinnabar'); });
-      dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('border-cinnabar');
-        if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]);
-      });
-      fileInput.addEventListener('change', (e) => {
-        if (e.target.files[0]) readFile(e.target.files[0]);
-      });
-
-      document.getElementById('modernCustomCheck').addEventListener('change', (e) => {
-        document.getElementById('modernCustomBox').classList.toggle('hidden', !e.target.checked);
-      });
-    }
-
-    function readFile(file) {
-      if (!file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        document.getElementById('imagePreview').src = e.target.result;
-        document.getElementById('uploadPrompt').classList.add('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // 載入水藍祥雲示範 (香港當代都市建築/階梯實景)
-    function loadAquaCloudDemoScenario() {
-      currentScenario = 'aqua';
-      document.getElementById('imagePreview').src = AQUA_CLOUD_DEMO.handDrawingSvg;
-      document.getElementById('uploadPrompt').classList.add('hidden');
-
-      // 更新選取意念
-      uncheckAll();
-      checkByValues('hanfu_element', ['宋代-修長簡潔', '魏晉-輕薄透氣的絹', '唐代-長裙']);
-      checkByValues('modern_element', ['透視紗網', '拼布']);
-      document.getElementById('modernCustomCheck').checked = true;
-      document.getElementById('modernCustomBox').classList.remove('hidden');
-      document.getElementById('modernCustomInput').value = "立領露肩剪裁、高級訂製晚禮服版型、手提玻璃魚缽配飾";
-      document.getElementById('patternInput').value = "立體浮雕粉白如意祥雲紋樣、流動水紋波浪、粉色內襯下裳滾邊。";
-
-      // 載入實景圖 (優先嘗試本地圖片，失敗則回退至高保真向量實景)
-      const modelImg = document.getElementById('streetModelImg');
-      modelImg.src = "image_78dbc3.jpg";
-      modelImg.onerror = () => {
-        modelImg.src = AQUA_CLOUD_DEMO.streetModelSvg;
-      };
-
-      document.getElementById('modelLocationLabel').textContent = "香港當代建築室外階梯 · 新國風高級訂製日常著裝模擬";
-      document.getElementById('modelBadgeTag').textContent = "都會階梯實景";
-      document.getElementById('modelBadgeTag').className = "text-[10px] px-2 py-0.5 bg-teal-100 text-teal-800 rounded font-medium";
-      document.getElementById('modelDetailNotes').textContent = "※ 著裝細節：高掛立領、流仙紗露肩披肩、水藍緞面長裙、粉白祥雲刺繡波紋";
-
-      currentScores = [...AQUA_CLOUD_DEMO.scores];
-      currentFeedbacks = [...AQUA_CLOUD_DEMO.feedbacks];
-
-      renderCriteria();
-      updateLevelAndRadar();
-    }
-
-    // 載入旺角街頭示範
-    function loadPokerDemoScenario() {
-      currentScenario = 'poker';
-      document.getElementById('imagePreview').src = POKER_DEMO.handDrawingSvg;
-      document.getElementById('uploadPrompt').classList.add('hidden');
-
-      uncheckAll();
-      checkByValues('hanfu_element', ['唐代-短袖外衣', '唐代-長裙', '宋代-修長簡潔', '明代-馬面裙']);
-      checkByValues('modern_element', ['金屬鍊條', '拼布']);
-      document.getElementById('modernCustomCheck').checked = true;
-      document.getElementById('modernCustomBox').classList.remove('hidden');
-      document.getElementById('modernCustomInput').value = "現代襯衫翻領（西裝領）、綁帶短靴（馬汀靴）";
-      document.getElementById('patternInput').value = "西洋撲克牌（黑桃A、梅花A）結合東方傳統海浪山水波紋、雲紋，以及下擺邊緣的回紋飾邊。";
-
-      const modelImg = document.getElementById('streetModelImg');
-      modelImg.src = "Gemini_Generated_Image_qrvh01qrvh01qrvh.jpeg";
-      modelImg.onerror = () => {
-        modelImg.src = POKER_DEMO.streetModelSvg;
-      };
-
-      document.getElementById('modelLocationLabel').textContent = "香港旺角街頭 · 雙層巴士、經典霓虹招牌與紅色計程車背景";
-      document.getElementById('modelBadgeTag').textContent = "旺角街頭實景";
-      document.getElementById('modelBadgeTag').className = "text-[10px] px-2 py-0.5 bg-red-100 text-cinnabar rounded font-medium";
-      document.getElementById('modelDetailNotes').textContent = "※ 著裝細節：西裝領襯衫、胸前金屬鍊、撲克牌拼布馬面裙、馬汀短靴";
-
-      currentScores = [...POKER_DEMO.scores];
-      currentFeedbacks = [...POKER_DEMO.feedbacks];
-
-      renderCriteria();
-      updateLevelAndRadar();
-    }
-
-    function uncheckAll() {
-      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-    }
-
-    function checkByValues(name, values) {
-      document.querySelectorAll(`input[name="${name}"]`).forEach(c => {
-        if (values.includes(c.value)) c.checked = true;
-      });
-    }
-
-    function triggerAssessment() {
-      const btn = document.getElementById('btnEvaluate');
-      const btnText = document.getElementById('btnEvaluateText');
-      const spinner = document.getElementById('evalSpinner');
-      const overlay = document.getElementById('genOverlay');
-
-      btn.disabled = true;
-      btnText.textContent = "AI 正在評定與生成實景概念圖...";
-      spinner.classList.remove('hidden');
-      overlay.classList.remove('hidden');
-
-      setTimeout(() => {
-        btn.disabled = false;
-        btnText.textContent = "重新評估作品並生成概念圖";
-        spinner.classList.add('hidden');
-        overlay.classList.add('hidden');
-
-        if (currentScenario === 'aqua') {
-          const modelImg = document.getElementById('streetModelImg');
-          modelImg.src = "image_78dbc3.jpg";
-          modelImg.onerror = () => { modelImg.src = AQUA_CLOUD_DEMO.streetModelSvg; };
-        } else {
-          const modelImg = document.getElementById('streetModelImg');
-          modelImg.src = "Gemini_Generated_Image_qrvh01qrvh01qrvh.jpeg";
-          modelImg.onerror = () => { modelImg.src = POKER_DEMO.streetModelSvg; };
-        }
-
-        renderCriteria();
-        updateLevelAndRadar();
-      }, 750);
-    }
-
-    function renderCriteria() {
-      const list = document.getElementById('criteriaList');
-      list.innerHTML = '';
-
-      CRITERIA_DEFINITIONS.forEach((def, index) => {
-        const score = currentScores[index];
-        const feedback = currentFeedbacks[index];
-
-        const card = document.createElement('div');
-        card.className = "bg-white border border-stone-200 rounded p-3 text-xs print-break";
-
-        let stepsHtml = SCALE_LEVELS.map(lvl => {
-          const isActive = lvl.score === score;
-          return `<button type="button" 
-                    class="level-step-btn ${isActive ? 'active' : 'inactive'}" 
-                    onclick="setScore(${index}, ${lvl.score})">
-                    ${lvl.label}
-                  </button>`;
-        }).join('<span class="text-stone-300 text-[10px] self-center">›</span>');
-
-        card.innerHTML = `
-          <div class="mb-1.5">
-            <div class="flex items-center gap-1.5 mb-0.5">
-              <span class="text-[10px] font-bold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded">${def.category}</span>
-              <span class="font-bold text-stone-800 font-serif-tc">${def.id}. ${def.name}</span>
+            <!-- 唐代 -->
+            <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100">
+              <span class="font-bold text-cinnabar block mb-1.5">c. 唐代</span>
+              <div class="space-y-1">
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-交領小袖" class="rounded text-red-800">交領小袖</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-高束裙腰" class="rounded text-red-800">高束裙腰</label>
+                <label class="flex items-center gap-1.5"><input type="checkbox" name="hanfu_element" value="唐代-垂背披帛" class="rounded text-red-800">垂背披帛</label>
+              </div>
             </div>
-            <p class="text-[11px] text-stone-400">${def.guide}</p>
-          </div>
 
-          <div class="mb-2 overflow-x-auto pb-1">
-            <div class="flex items-center gap-1 min-w-max p-1 bg-stone-50 rounded border border-stone-200">
-              ${stepsHtml}
-            </div>
-          </div>
-
-          <div class="bg-stone-50 rounded p-2 border border-stone-200">
-            <label class="text-[10px] font-semibold text-stone-500 flex items-center mb-0.5">
-              <span class="w-1.5 h-1.5 bg-cinnabar rounded-full mr-1"></span>改善意見與指導回饋：
-            </label>
-            <textarea oninput="currentFeedbacks[${index}]=this.value" 
-              class="w-full bg-transparent text-stone-700 text-xs focus:outline-none resize-none border-0 p-0 leading-relaxed" 
-              rows="2">${feedback}</textarea>
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    function setScore(index, newScore) {
-      currentScores[index] = newScore;
-      renderCriteria();
-      updateLevelAndRadar();
-    }
-
-    function updateLevelAndRadar() {
-      const sum = currentScores.reduce((a, b) => a + b, 0);
-
-      let levelText = "";
-      let levelClass = "";
-      let activeTier = "";
-
-      if (sum >= 33) {
-        levelText = "卓越";
-        levelClass = "bg-cinnabar";
-        activeTier = "tier5";
-      } else if (sum >= 25) {
-        levelText = "熟練";
-        levelClass = "bg-amber-700";
-        activeTier = "tier4";
-      } else if (sum >= 20) {
-        levelText = "基礎 / 達標";
-        levelClass = "bg-emerald-700";
-        activeTier = "tier3";
-      } else if (sum >= 16) {
-        levelText = "部分達標，但表現不夠穩定";
-        levelClass = "bg-orange-600";
-        activeTier = "tier2";
-      } else {
-        levelText = "尚未掌握核心能力";
-        levelClass = "bg-stone-600";
-        activeTier = "tier1";
-      }
-
-      const badge = document.getElementById('overallBadge');
-      badge.textContent = levelText;
-      badge.className = `inline-block px-4 py-1 rounded-full text-xs font-bold text-white shadow-xs ${levelClass}`;
-
-      ["tier5", "tier4", "tier3", "tier2", "tier1"].forEach(t => {
-        const el = document.getElementById(t);
-        el.className = (t === activeTier) 
-          ? "px-1.5 py-0.5 rounded font-bold bg-cinnabar/15 text-cinnabar border border-cinnabar/30"
-          : "px-1.5 py-0.5 rounded text-stone-400 bg-stone-100";
-      });
-
-      updateRadarChart(currentScores);
-    }
-
-    function updateRadarChart(scores) {
-      const labels = CRITERIA_DEFINITIONS.map(d => `${d.id}.${d.name.substring(0, 3)}..`);
-      const ctx = document.getElementById('radarChart').getContext('2d');
-
-      if (radarChartInstance) {
-        radarChartInstance.data.datasets[0].data = scores;
-        radarChartInstance.update();
-        return;
-      }
-
-      radarChartInstance = new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: labels,
-          datasets: [{
-            data: scores,
-            backgroundColor: 'rgba(168, 56, 54, 0.25)',
-            borderColor: '#a83836',
-            borderWidth: 2,
-            pointBackgroundColor: '#a83836',
-            pointBorderColor: '#fff',
-            pointRadius: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            r: {
-              min: 0,
-              max: 5,
-              ticks: { display: false, stepSize: 1 },
-              grid: { color: 'rgba(0, 0, 0, 0.06)' },
-              angleLines: { color: 'rgba(0, 0, 0, 0.08)' },
-              pointLabels: {
-                font: { size: 9, family: "'Noto Sans TC', sans-serif" },
-                color: '#555'
-              }
-            }
-          },
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-    }
-
-    function openLightbox(src) {
-      if (!src) return;
-      document.getElementById('lightboxImg').src = src;
-      document.getElementById('lightbox').classList.remove('hidden');
-    }
-
-    function closeLightbox() {
-      document.getElementById('lightbox').classList.add('hidden');
-    }
-  </script>
-</body>
-</html>
+            <!-- 宋代 -->
+            <div class="bg-stone-50/70 p-2.5 rounded border border-stone-100">
+              <span class="font-bold text-cinnabar block mb-1.5">d. 宋代</span>
+              <div class="space-y-1">
+                <label class="flex items-center gap-
